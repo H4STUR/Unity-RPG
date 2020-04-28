@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using RPG.Movement;
 using RPG.Core;
 
@@ -14,7 +12,7 @@ namespace RPG.Combat
 
         Health target;
 
-        float timeSinceLastAttack;
+        float timeSinceLastAttack = Mathf.Infinity;
 
         private void Update()
         {
@@ -24,7 +22,7 @@ namespace RPG.Combat
 
             if (this.target.IsDead()) return;
 
-            if (!GetIsInRange())
+            if (!GetIsInWeaponRange(this.target))
             {
                 GetComponent<Move>().MoveTo(target.transform.position);
             }
@@ -40,25 +38,26 @@ namespace RPG.Combat
             GetComponent<Move>().transform.LookAt(target.transform);
 
             if (this.timeBetweenAttacks < this.timeSinceLastAttack)
-            { 
+            {
                 //tHIS WILL TRIGGER THE hIT() EVENT
+                GetComponent<Animator>().ResetTrigger("stopAttack");
                 GetComponent<Animator>().SetTrigger("attack");
                 this.timeSinceLastAttack = 0;
             }
         }
 
-        bool GetIsInRange()
+        public bool GetIsInWeaponRange(Health target)
         {
-            return (Vector3.Distance(transform.position, target.transform.position) < weaponRange);
+            return (Vector3.Distance(this.transform.position, target.transform.position) < weaponRange);
         }
 
-        public bool CanAttack(CombatTarget combatTarget)
+        public bool CanAttack(GameObject combatTarget)
         {
             if (combatTarget == null) return false;
             Health targetToTest = combatTarget.GetComponent<Health>();
             return (targetToTest != null && !targetToTest.IsDead());
         }
-        public void Attack(CombatTarget combatTarget)
+        public void Attack(GameObject combatTarget)
         {
             GetComponent<ActionScheduler>().StartAction(this);
             this.target = combatTarget.GetComponent<Health>();
@@ -66,6 +65,7 @@ namespace RPG.Combat
 
         public void Cancel()
         {
+            GetComponent<Animator>().ResetTrigger("attack");
             GetComponent<Animator>().SetTrigger("stopAttack");
             this.target = null;
         }
@@ -73,6 +73,7 @@ namespace RPG.Combat
         //Animation event
         void Hit()
         {
+            if (target == null) return;
             this.target.TakeDammage(this.weaponDammage);
         }
     }

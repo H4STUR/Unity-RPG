@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPG.Combat
+namespace RPG.Core
 {
     public class Health : MonoBehaviour
     {
@@ -23,9 +23,13 @@ namespace RPG.Combat
             if (isDead) return;
 
             this.isDead = true;
-            this.GetComponent<CapsuleCollider>().enabled = false;
+
+            if(this.GetComponent<CapsuleCollider>())
+                this.GetComponent<CapsuleCollider>().enabled = false;
+
             GetComponent<Animator>().SetTrigger("die");
-            //Destroy(this.gameObject);
+
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
 

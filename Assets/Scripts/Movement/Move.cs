@@ -9,13 +9,16 @@ namespace RPG.Movement
     public class Move : MonoBehaviour, IAction
     {
         NavMeshAgent navMeshAgent;
+        Health health;
 
         private void Start()
         {
+            this.health = GetComponent<Health>();
             this.navMeshAgent = GetComponent<NavMeshAgent>();
         }
         void Update()
         {
+            navMeshAgent.enabled = !health.IsDead();
             UpdateAnimator();
         }
 

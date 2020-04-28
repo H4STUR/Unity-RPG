@@ -16,11 +16,15 @@ namespace RPG.Core
         private Space offsetPositionSpace = Space.Self;
 
         [SerializeField]
-        private bool lookAt = true;
+        private bool lookAt = true;        
+        
+        [SerializeField]
+        private bool rotate = true;
 
         private void LateUpdate()
         {
-            Refresh();
+            if (rotate) Refresh();
+            else follow();
         }
 
         public void Refresh()
@@ -39,7 +43,7 @@ namespace RPG.Core
             }
             else
             {
-                transform.position = target.position + offsetPosition;
+                follow();
             }
 
             // compute rotation
@@ -51,6 +55,11 @@ namespace RPG.Core
             {
                 transform.rotation = target.rotation;
             }
+        }
+
+        public void follow()
+        {
+            transform.position = target.position + offsetPosition;
         }
     }
 
