@@ -28,7 +28,7 @@ namespace RPG.Movement
             GetComponent<IAction>().Cancel();
             MoveTo(dest);
         }
-        public void MoveTo(Vector3 dest)
+        private void MoveTo(Vector3 dest)
         {
             this.navMeshAgent.destination = dest;
             this.navMeshAgent.isStopped = false;

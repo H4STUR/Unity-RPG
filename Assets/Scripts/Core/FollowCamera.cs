@@ -6,11 +6,11 @@ namespace RPG.Core
 {
     public class FollowCamera : MonoBehaviour
     {
-        [SerializeField] Transform target;
+        [SerializeField] Transform target = null;
 
 
         [SerializeField]
-        private Vector3 offsetPosition;
+        private Vector3 offsetPosition = Vector3.zero;
 
         [SerializeField]
         private Space offsetPositionSpace = Space.Self;

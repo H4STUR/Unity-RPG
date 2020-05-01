@@ -16,7 +16,7 @@ namespace RPG.Combat
 
         private void Update()
         {
-            timeSinceLastAttack += Time.deltaTime;
+            this.timeSinceLastAttack += Time.deltaTime;
 
             if (target == null) return;
 
@@ -24,7 +24,7 @@ namespace RPG.Combat
 
             if (!GetIsInWeaponRange(this.target))
             {
-                GetComponent<Move>().MoveTo(target.transform.position);
+                GetComponent<Move>().StartMoveAction(target.transform.position);
             }
             else
             {
